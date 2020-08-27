@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    body {
+      color: black;
+      background: rgb(14, 13, 13);
+    }
+    .container {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      height: 100vh;
+    }
+    .box {
+      height: 150px;
+      width: 150px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    .box1 {
+      background: rgb(98, 98, 238);
+    }
+    .box2 {
+      background: rgb(235, 94, 94);
+    }
+    .box3 {
+      background: rgb(127, 255, 0);
+    }
+    .box4 {
+      background: cyan;
+    }
+    .box5 {
+      background: darkorange;
+    }
+    .box6 {
+      background: deeppink;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="box box1"><h1 id="timer1">00:00</h1></div>
+    <div class="box box2"><h1 id="timer2">00:00</h1></div>
+    <div class="box box3"><h1 id="timer3">00:00</h1></div>
+    <div class="box box4"><h1 id="timer4">00:00</h1></div>
+    <div class="box box5"><h1 id="timer5">00:00</h1></div>
+    <div class="box box6"><h1 id="timer6">00:00</h1></div>
+  </div>
+  
+</body>
+<script>
+  var id;
+
+  const boxTimers = {
+    box1: {
+      timer: document.getElementById('timer1'),
+      value: "00:00"
+    },
+    box2: {
+      timer: document.getElementById('timer2'),
+      value: "00:00"
+    },
+    box3: {
+      timer: document.getElementById('timer3'),
+      value: "00:00"
+    },
+    box4: {
+      timer: document.getElementById('timer4'),
+      value: "00:00"
+    },
+    box5: {
+      timer: document.getElementById('timer5'),
+      value: "00:00"
+    },
+    box6: {
+      timer: document.getElementById('timer6'),
+      value: "00:00"
+    }
+  }
+
+function startTimer(m, s, boxTimer) {
+  let min
+  let sec
+    if(s.toString().length < 2) {
+      sec = "0" + s
+      if(m.toString().length < 2) {
+        min = "0" + m
+      }
+      boxTimer.textContent = min + ":" + sec
+    } else {
+      boxTimer.textContent =  m + ":" + s;
+    }
+    
+    s = s + 1
+    if(s === 60) {
+      m += 1
+      s = 0
+    }
+    id = setTimeout(function () {
+        startTimer(m, s, boxTimer)
+    }, 1000);
+}
+
+const test = {
+  val: "00:00"
+}
+
+function pauseTimer(boxTimer, val) {
+  return function() {
+    val.value = boxTimer.textContent; 
+    clearTimeout(id);
+  }
+}
+
+function resumeTimer(boxTimer, val) {
+  return function() {
+    var t = val.value.split(":");
+    startTimer(parseInt(t[0], 10), parseInt(t[1], 10), boxTimer);
+  }
+}
+
+for(box in boxTimers) {
+  document.querySelector(`.${box}`).onmouseover = resumeTimer(boxTimers[box].timer, boxTimers[box])
+  document.querySelector(`.${box}`).onmouseout = pauseTimer(boxTimers[box].timer, boxTimers[box])
+}
+
+</script>
+</html>
